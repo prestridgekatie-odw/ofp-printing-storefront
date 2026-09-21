@@ -1,11 +1,11 @@
-<div class="App">
-  <header class="App-header">
-    <img src="Octocat.png" class="App-logo" alt="logo" />
-    <p>
-      GitHub Codespaces <span class="heart">♥️</span> Rails
-    </p>
-    <p class="small">
-      Edit <code>app/views/hello/index.html.erb</code> and see changes live!
-    </p>
-  </header>
+<div class="ofp-site" data-controller="homepage" data-action="keydown.esc@window->homepage#closeOnEscape">
+  <%= render "header" %>
+  <main id="top">
+    <%= render "hero" %>
+    <%= render "why_choose" %>
+    <%= render "products" %>
+    <%= render "recent_work" %>
+    <%= render "cta" %>
+  </main>
+  <%= render "footer" %>
 </div>

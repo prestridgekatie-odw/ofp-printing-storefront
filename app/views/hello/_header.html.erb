@@ -1,0 +1,19 @@
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="OFP Printing home">
+    <%= image_tag "ofp/ofp-logo-transparent.png", alt: "OFP Printing" %>
+  </a>
+  <button class="menu-toggle" type="button" data-action="homepage#toggleMenu" data-homepage-target="menuButton" aria-controls="site-navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+    <span class="sr-only">Toggle navigation</span>
+  </button>
+  <nav id="site-navigation" class="site-nav" data-homepage-target="navigation" aria-label="Main navigation">
+    <a class="is-active" href="#top" data-action="homepage#closeMenu">Home</a>
+    <a href="#products" data-action="homepage#closeMenu">Products</a>
+    <a href="#services" data-action="homepage#closeMenu">Services</a>
+    <a href="#recent-work" data-action="homepage#closeMenu">Gallery</a>
+    <a href="#why-choose" data-action="homepage#closeMenu">About us</a>
+    <a href="#contact" data-action="homepage#closeMenu">Contact</a>
+    <a class="quote-link" href="#contact" data-action="homepage#closeMenu">Get a quote</a>
+    <a class="cart-link" href="#contact" data-action="homepage#closeMenu" aria-label="Cart placeholder">&#128722;<span class="sr-only">Cart</span></a>
+  </nav>
+</header>
