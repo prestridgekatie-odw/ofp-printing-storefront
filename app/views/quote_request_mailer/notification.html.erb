@@ -1,0 +1,15 @@
+<h1>New quote request</h1>
+<p>Reference: <strong><%= @quote_request.public_reference %></strong></p>
+<p>Contact: <%= @quote_request.contact_name %></p>
+<p>Email: <%= @quote_request.email %></p>
+<p>Phone: <%= @quote_request.phone.presence || "Not provided" %></p>
+<p>Organization: <%= @quote_request.organization_name.presence || "Not provided" %></p>
+<p>Project types: <%= @quote_request.project_types.join(", ") %></p>
+<p>Quantity: <%= @quote_request.quantity_summary %></p>
+<p>Needed by: <%= @quote_request.needed_by || "Not provided" %></p>
+<p>Event date: <%= @quote_request.event_date || "Not provided" %></p>
+<p>Rush request: <%= @quote_request.rush_request ? "Yes, subject to OFP approval" : "No" %></p>
+<p>Delivery: <%= @quote_request.delivery_method %></p>
+<p>Artwork status: <%= @quote_request.artwork_status %></p>
+<p>Description:</p>
+<p><%= simple_format(@quote_request.description) %></p>

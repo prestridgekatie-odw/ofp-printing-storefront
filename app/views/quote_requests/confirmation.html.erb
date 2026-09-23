@@ -1,0 +1,18 @@
+<main class="quote-page quote-confirmation">
+  <header class="quote-header">
+    <%= link_to root_path, class: "quote-brand", aria: { label: "OFP Printing home" } do %>
+      <%= image_tag "ofp/ofp-logo-transparent.png", alt: "OFP Printing" %>
+    <% end %>
+    <%= link_to "Back to home", root_path, class: "quote-home-link" %>
+  </header>
+  <section class="confirmation-shell" aria-labelledby="confirmation-title">
+    <p class="quote-eyebrow">Request received</p>
+    <h1 id="confirmation-title">We&apos;ve got your request.</h1>
+    <p class="confirmation-reference">Reference <strong><%= @quote_request.public_reference %></strong></p>
+    <p class="quote-intro">OFP will review your request and contact you with next steps.</p>
+    <div class="confirmation-actions">
+      <%= link_to "Return to home", root_path, class: "quote-button quote-button-secondary" %>
+      <%= link_to "Start another quote", quote_path, class: "quote-button quote-button-primary" %>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,16 @@
+New quote request
+
+Reference: <%= @quote_request.public_reference %>
+Contact: <%= @quote_request.contact_name %>
+Email: <%= @quote_request.email %>
+Phone: <%= @quote_request.phone.presence || "Not provided" %>
+Organization: <%= @quote_request.organization_name.presence || "Not provided" %>
+Project types: <%= @quote_request.project_types.join(", ") %>
+Quantity: <%= @quote_request.quantity_summary %>
+Needed by: <%= @quote_request.needed_by || "Not provided" %>
+Event date: <%= @quote_request.event_date || "Not provided" %>
+Rush request: <%= @quote_request.rush_request ? "Yes, subject to OFP approval" : "No" %>
+Delivery: <%= @quote_request.delivery_method %>
+Artwork status: <%= @quote_request.artwork_status %>
+Description:
+<%= @quote_request.description %>

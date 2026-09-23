@@ -64,6 +64,12 @@ Rails.application.configure do
     'X-Frame-Options' => "ALLOW-FROM #{pf_domain}"
   }
 
+  # Codespaces rewrites the external forwarded host. Rails authenticity-token
+  # protection remains enabled; only the additional Origin-header comparison is
+  # disabled for development, leaving production unchanged.
+  config.assume_ssl = true if ENV["CODESPACES"] == "true"
+  config.action_controller.forgery_protection_origin_check = false if ENV["CODESPACES"] == "true"
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

@@ -1,0 +1,68 @@
+<% error_attributes = @quote_request.errors.attribute_names %>
+<% initial_step = if error_attributes.any? { |attribute| %i[organization_name contact_name position_title email phone preferred_contact_method].include?(attribute) }
+                    1
+                  elsif error_attributes.any? { |attribute| %i[project_types other_project_type quantity_summary artwork_status].include?(attribute) }
+                    2
+                  elsif error_attributes.any? { |attribute| %i[needed_by event_date delivery_method rush_request description information_confirmed contact_consent].include?(attribute) }
+                    3
+                  else
+                    1
+                  end %>
+
+<%= form_with model: @quote_request, url: quote_requests_path, class: "quote-form", data: { quote_form_target: "form", initial_step: initial_step } do |form| %>
+  <% if @quote_request.errors.any? %>
+    <div class="form-errors" role="alert" tabindex="-1" data-quote-form-target="errorSummary">
+      <h2 id="quote-errors-title">Please review your request</h2>
+      <ul>
+        <% @quote_request.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="quote-progress" aria-label="Quote request progress">
+    <div class="quote-progress-meta"><span data-quote-form-target="stepLabel">Step 1 of 3</span><span data-quote-form-target="stepName">About you</span></div>
+    <div class="quote-progress-track"><span data-quote-form-target="progressBar"></span></div>
+  </div>
+
+  <section class="quote-step" data-quote-form-target="step" data-step="1" aria-labelledby="step-one-title">
+    <div class="step-heading"><span class="step-number">01</span><div><p class="step-kicker">Step 1 of 3</p><h2 id="step-one-title">About you</h2><p>Tell us who we&apos;ll be working with.</p></div></div>
+    <div class="form-grid">
+      <div class="field field-wide"><%= form.label :organization_name, "Organization or team name (optional)." %><%= form.text_field :organization_name, autocomplete: "organization" %></div>
+      <div class="field"><%= form.label :contact_name do %>Contact name <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.text_field :contact_name, required: true, autocomplete: "name" %></div>
+      <div class="field"><%= form.label :position_title, "Position or title (optional)" %><%= form.text_field :position_title, autocomplete: "organization-title" %></div>
+      <div class="field"><%= form.label :email do %>Email <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.email_field :email, required: true, autocomplete: "email" %></div>
+      <div class="field"><%= form.label :phone, "Phone" %><%= form.telephone_field :phone, autocomplete: "tel", data: { quote_form_target: "phone" } %><p class="field-note" data-quote-form-target="phoneNote">Required when phone or text is your preferred contact method.</p></div>
+      <fieldset class="field field-wide"><legend>Preferred contact method <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></legend><div class="choice-row">
+        <% [["phone", "Phone"], ["email", "Email"], ["text", "Text"]].each do |value, label| %><label class="choice-card choice-card-small"><%= form.radio_button :preferred_contact_method, value, required: true, data: { action: "quote-form#updateContactGuidance" } %><span><strong><%= label %></strong><small><%= value == "text" ? "SMS updates" : "Reach me by #{label.downcase}" %></small></span></label><% end %>
+      </div></fieldset>
+    </div>
+    <div class="step-actions"><span></span><button type="button" class="quote-button quote-button-primary" data-action="quote-form#next">Continue <span aria-hidden="true">&rarr;</span></button></div>
+  </section>
+
+  <section class="quote-step" data-quote-form-target="step" data-step="2" aria-labelledby="step-two-title">
+    <div class="step-heading"><span class="step-number">02</span><div><p class="step-kicker">Step 2 of 3</p><h2 id="step-two-title">Your project</h2><p>Select the services that fit your idea.</p></div></div>
+    <fieldset class="field-group"><legend>Project types <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></legend><p class="field-note" data-quote-form-target="projectTypeMessage">Choose one to five.</p><div class="project-type-grid">
+      <% QuoteRequest::PROJECT_TYPES.each do |project_type| %><label class="choice-card project-card"><%= check_box_tag "quote_request[project_types][]", project_type, @quote_request.project_types.include?(project_type), id: "project-type-#{project_type.parameterize}", data: { action: "quote-form#toggleOther" } %><span><strong><%= project_type %></strong><small><%= project_type == "Other" ? "Tell us more below" : "Custom #{project_type.downcase}" %></small></span></label><% end %>
+    </div><div class="field other-project-field" data-quote-form-target="otherField"><%= form.label :other_project_type, "Other project type explanation" %><%= form.text_field :other_project_type, data: { quote_form_target: "otherInput" } %></div></fieldset>
+    <div class="form-grid"><div class="field"><%= form.label :quantity_summary do %>Estimated quantity or quantity summary <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.text_field :quantity_summary, required: true %></div></div>
+    <fieldset class="field-group"><legend>Artwork status <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></legend><div class="artwork-grid">
+      <% [["full_design", "Need full design created", "Starting from a fresh design"], ["existing_artwork", "Have existing artwork", "Ready to send over"], ["minor_edits", "Need minor edits", "Small updates to a design"], ["reorder", "Reorder from previous job", "Repeat a past favorite"]].each do |value, label, detail| %><label class="choice-card artwork-card"><%= form.radio_button :artwork_status, value, required: true %><span><strong><%= label %></strong><small><%= detail %></small></span></label><% end %>
+    </div></fieldset>
+    <div class="step-actions"><button type="button" class="quote-button quote-button-secondary" data-action="quote-form#previous">&larr; Back</button><button type="button" class="quote-button quote-button-primary" data-action="quote-form#next">Continue <span aria-hidden="true">&rarr;</span></button></div>
+  </section>
+
+  <section class="quote-step" data-quote-form-target="step" data-step="3" aria-labelledby="step-three-title">
+    <div class="step-heading"><span class="step-number">03</span><div><p class="step-kicker">Step 3 of 3</p><h2 id="step-three-title">Timing &amp; delivery</h2><p>Help us plan the next move.</p></div></div>
+    <div class="form-grid"><div class="field"><%= form.label :needed_by, "Needed-by date (optional)" %><%= form.date_field :needed_by %></div><div class="field"><%= form.label :event_date, "Event date (optional)" %><%= form.date_field :event_date %></div><div class="field field-wide"><%= form.label :delivery_method do %>Delivery method <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.select :delivery_method, [["Pickup", "pickup"], ["Shipping", "shipping"], ["Local delivery", "local_delivery"]], { include_blank: "Choose one" }, required: true %></div><div class="field field-wide"><%= form.label :description do %>Brief project description <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.text_area :description, required: true, rows: 5 %></div></div>
+    <div class="step-options"><label class="choice checkbox-choice"><%= form.check_box :rush_request %><span><strong>Request rush service</strong><small>Rush timing is subject to OFP approval.</small></span></label><label class="choice checkbox-choice"><%= form.check_box :information_confirmed, required: true %><span>I confirm the submitted information is accurate. <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></span></label><label class="choice checkbox-choice"><%= form.check_box :contact_consent, required: true %><span>I consent to being contacted about this request. <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></span></label></div>
+    <div class="step-actions"><button type="button" class="quote-button quote-button-secondary" data-action="quote-form#previous">&larr; Back</button><%= form.submit "Submit quote request", class: "quote-button quote-button-submit" %></div>
+  </section>
+
+  <div class="honeypot" aria-hidden="true">
+    <%= label_tag :website, "Website" %>
+    <%= text_field_tag :website, nil, tabindex: "-1", autocomplete: "off" %>
+  </div>
+
+<% end %>

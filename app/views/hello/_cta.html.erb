@@ -1,6 +1,6 @@
 <section id="contact" class="cta section-shell" aria-labelledby="cta-title">
   <div class="cta-copy"><h2 id="cta-title">Ready to start<br>your project?</h2><p>Let&apos;s create something amazing together.</p></div>
-  <%= mail_to "info@ofpprinting.com", "Get a quote", class: "button button-dark" %>
+  <%= link_to "Get a quote", quote_path, class: "button button-dark" %>
   <div class="contact-items">
     <div class="cta-contact"><strong>Call us</strong><%= link_to "(951) 676-7706", "tel:+19516767706", class: "cta-contact__link" %></div>
     <div class="cta-contact"><strong>Email us</strong><%= mail_to "info@ofpprinting.com", "info@ofpprinting.com", class: "cta-contact__link" %></div>
