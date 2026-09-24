@@ -6,6 +6,13 @@ Email: <%= @quote_request.email %>
 Phone: <%= @quote_request.phone.presence || "Not provided" %>
 Organization: <%= @quote_request.organization_name.presence || "Not provided" %>
 Project types: <%= @quote_request.project_types.join(", ") %>
+Project Details
+===============
+<% @quote_request.project_details_for_notification.each do |project_type, details| %>
+<%= project_type %>
+<% details.each do |label, value| %>- <%= label %>: <%= value %>
+<% end %>
+<% end %>
 Quantity: <%= @quote_request.quantity_summary %>
 Needed by: <%= @quote_request.needed_by || "Not provided" %>
 Event date: <%= @quote_request.event_date || "Not provided" %>

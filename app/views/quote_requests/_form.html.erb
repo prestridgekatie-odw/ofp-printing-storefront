@@ -1,7 +1,7 @@
 <% error_attributes = @quote_request.errors.attribute_names %>
 <% initial_step = if error_attributes.any? { |attribute| %i[organization_name contact_name position_title email phone preferred_contact_method].include?(attribute) }
                     1
-                  elsif error_attributes.any? { |attribute| %i[project_types other_project_type quantity_summary artwork_status].include?(attribute) }
+                    elsif error_attributes.any? { |attribute| %i[project_types project_details other_project_type quantity_summary artwork_status].include?(attribute) }
                     2
                   elsif error_attributes.any? { |attribute| %i[needed_by event_date delivery_method rush_request description information_confirmed contact_consent].include?(attribute) }
                     3
@@ -9,7 +9,7 @@
                     1
                   end %>
 
-<%= form_with model: @quote_request, url: quote_requests_path, class: "quote-form", data: { quote_form_target: "form", initial_step: initial_step } do |form| %>
+<%= form_with model: @quote_request, url: quote_requests_path, class: "quote-form", data: { controller: "quote-form project-details", quote_form_target: "form", initial_step: initial_step } do |form| %>
   <% if @quote_request.errors.any? %>
     <div class="form-errors" role="alert" tabindex="-1" data-quote-form-target="errorSummary">
       <h2 id="quote-errors-title">Please review your request</h2>
@@ -44,8 +44,37 @@
   <section class="quote-step" data-quote-form-target="step" data-step="2" aria-labelledby="step-two-title">
     <div class="step-heading"><span class="step-number">02</span><div><p class="step-kicker">Step 2 of 3</p><h2 id="step-two-title">Your project</h2><p>Select the services that fit your idea.</p></div></div>
     <fieldset class="field-group"><legend>Project types <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></legend><p class="field-note" data-quote-form-target="projectTypeMessage">Choose one to five.</p><div class="project-type-grid">
-      <% QuoteRequest::PROJECT_TYPES.each do |project_type| %><label class="choice-card project-card"><%= check_box_tag "quote_request[project_types][]", project_type, @quote_request.project_types.include?(project_type), id: "project-type-#{project_type.parameterize}", data: { action: "quote-form#toggleOther" } %><span><strong><%= project_type %></strong><small><%= project_type == "Other" ? "Tell us more below" : "Custom #{project_type.downcase}" %></small></span></label><% end %>
-    </div><div class="field other-project-field" data-quote-form-target="otherField"><%= form.label :other_project_type, "Other project type explanation" %><%= form.text_field :other_project_type, data: { quote_form_target: "otherInput" } %></div></fieldset>
+      <% QuoteRequest::PROJECT_TYPES.each do |project_type| %><label class="choice-card project-card"><%= check_box_tag "quote_request[project_types][]", project_type, @quote_request.project_types.include?(project_type), id: "project-type-#{project_type.parameterize}", aria: { controls: "project-details-#{project_type.parameterize}", expanded: @quote_request.project_types.include?(project_type) }, data: { action: "quote-form#toggleOther project-details#toggle" } %><span><strong><%= project_type %></strong><small><%= project_type == "Other" ? "Tell us more below" : "Custom #{project_type.downcase}" %></small></span></label><% end %>
+    </div>
+    <div class="project-details-panels">
+      <% QuoteRequest::PROJECT_DETAIL_SECTIONS.each do |project_type, section| %>
+        <% detail_values = @quote_request.project_details.to_h[section[:key]].to_h %>
+        <fieldset class="project-detail-panel" id="project-details-<%= project_type.parameterize %>" data-project-details-target="panel" data-project-type="<%= project_type %>" aria-labelledby="project-details-<%= project_type.parameterize %>-legend" hidden>
+          <legend id="project-details-<%= project_type.parameterize %>-legend"><%= project_type %> details</legend>
+          <div class="project-detail-grid">
+            <% section[:fields].each do |field, definition| %>
+              <% value = detail_values[field] %>
+              <% field_label = field.humanize %>
+              <% if definition[:type] == :text %>
+                <div class="field project-detail-field"<%= " data-other-field-for=\"#{definition[:required_for]}\" hidden" if definition[:required_for] %>>
+                  <%= label_tag "project-detail-#{section[:key]}-#{field}", field_label do %><%= field_label %><% if definition[:required_for] %> <span class="required-mark" aria-hidden="true">*</span><% end %><% end %>
+                  <%= text_field_tag "quote_request[project_details][#{section[:key]}][#{field}]", value, id: "project-detail-#{section[:key]}-#{field}", maxlength: QuoteRequest::DETAIL_TEXT_LIMIT, autocomplete: "off", disabled: definition[:required_for].present?, data: { project_details_other_input: field } %>
+                </div>
+              <% elsif definition[:type] == :multiple %>
+                <fieldset class="field-group project-detail-field" data-project-details-required="<%= definition[:required] %>" data-project-details-field-group="<%= field %>"><legend><%= field_label %><% if definition[:required] %> <span class="required-mark" aria-hidden="true">*</span><% end %></legend><div class="detail-choice-grid">
+                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= check_box_tag "quote_request[project_details][#{section[:key]}][#{field}][]", option, Array(value).include?(option), id: "project-detail-#{section[:key]}-#{field}-#{option}", disabled: true, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
+                </div></fieldset>
+              <% else %>
+                <fieldset class="field-group project-detail-field" data-project-details-required="<%= definition[:required] %>" data-project-details-field-group="<%= field %>"><legend><%= field_label %><% if definition[:required] %> <span class="required-mark" aria-hidden="true">*</span><% end %></legend><div class="detail-choice-grid detail-choice-grid-single">
+                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= radio_button_tag "quote_request[project_details][#{section[:key]}][#{field}]", option, value == option, id: "project-detail-#{section[:key]}-#{field}-#{option}", required: definition[:required], disabled: true, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
+                </div></fieldset>
+              <% end %>
+            <% end %>
+          </div>
+        </fieldset>
+      <% end %>
+    </div>
+    <div class="field other-project-field" data-quote-form-target="otherField"><%= form.label :other_project_type, "Other project type explanation" %><%= form.text_field :other_project_type, maxlength: 255, data: { quote_form_target: "otherInput" } %></div></fieldset>
     <div class="form-grid"><div class="field"><%= form.label :quantity_summary do %>Estimated quantity or quantity summary <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span><% end %><%= form.text_field :quantity_summary, required: true %></div></div>
     <fieldset class="field-group"><legend>Artwork status <span class="required-mark" aria-hidden="true">*</span><span class="sr-only">required</span></legend><div class="artwork-grid">
       <% [["full_design", "Need full design created", "Starting from a fresh design"], ["existing_artwork", "Have existing artwork", "Ready to send over"], ["minor_edits", "Need minor edits", "Small updates to a design"], ["reorder", "Reorder from previous job", "Repeat a past favorite"]].each do |value, label, detail| %><label class="choice-card artwork-card"><%= form.radio_button :artwork_status, value, required: true %><span><strong><%= label %></strong><small><%= detail %></small></span></label><% end %>

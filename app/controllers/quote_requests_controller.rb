@@ -47,8 +47,18 @@ class QuoteRequestsController < ApplicationController
       :artwork_status,
       :information_confirmed,
       :contact_consent,
-      project_types: []
+      project_types: [],
+      project_details: permitted_project_detail_filters
     )
+  end
+
+  def permitted_project_detail_filters
+    QuoteRequest::PROJECT_DETAIL_SECTIONS.to_h do |_, section|
+      fields = section[:fields].map do |field, definition|
+        definition[:type] == :multiple ? { field => [] } : field
+      end
+      [section[:key], fields]
+    end
   end
 
   def honeypot_filled?

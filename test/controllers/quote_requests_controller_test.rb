@@ -9,6 +9,7 @@ class QuoteRequestsControllerTest < ActionDispatch::IntegrationTest
       phone: "555-0100",
       preferred_contact_method: "email",
       project_types: ["Sports Uniforms"],
+      project_details: { "sports_uniforms" => { "sport" => "football", "garment_types" => ["jersey"], "decoration_methods" => ["sublimation"] } },
       quantity_summary: "24 uniforms",
       description: "Uniforms for a community team.",
       artwork_status: "existing_artwork",
@@ -132,6 +133,23 @@ class QuoteRequestsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_equal "new", request.status
     assert_match(/\AOFP-[A-Z0-9]{16}\z/, request.public_reference)
+    assert_not_equal "OFP-MALICIOUSREFERENCE", request.public_reference
+  end
+
+  test "persists only approved selected project detail parameters" do
+    post quote_requests_path, params: { quote_request: @payload.merge(
+      project_details: {
+        sports_uniforms: { sport: "football", garment_types: ["jersey", "jersey"], decoration_methods: ["sublimation"], unknown: "discard" },
+        fan_apparel_spirit_wear: { garment_types: ["hoodie"] }
+      },
+      status: "closed",
+      public_reference: "OFP-MALICIOUSREFERENCE"
+    ) }
+
+    request = QuoteRequest.order(:created_at).last
+    assert_response :redirect
+    assert_equal({ "sports_uniforms" => { "sport" => "football", "garment_types" => ["jersey"], "decoration_methods" => ["sublimation"] } }, request.project_details)
+    assert_equal "new", request.status
     assert_not_equal "OFP-MALICIOUSREFERENCE", request.public_reference
   end
 

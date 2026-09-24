@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_23_071029) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_24_090000) do
   create_table "quote_requests", force: :cascade do |t|
     t.string "artwork_status", null: false
     t.boolean "contact_consent", default: false, null: false
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_23_071029) do
     t.string "phone"
     t.string "position_title"
     t.string "preferred_contact_method", null: false
+    t.json "project_details", default: {}, null: false
     t.json "project_types", default: [], null: false
     t.string "public_reference", null: false
     t.string "quantity_summary", null: false
