@@ -16,7 +16,7 @@ class QuoteRequest < ApplicationRecord
   CONTACT_METHODS = %w[phone email text].freeze
   DELIVERY_METHODS = %w[pickup shipping local_delivery].freeze
   ARTWORK_STATUSES = %w[full_design existing_artwork minor_edits reorder].freeze
-  STATUSES = ["new"].freeze
+  STATUSES = %w[new submitted_review].freeze
   DETAIL_TEXT_LIMIT = 255
   DETAIL_SELECTION_LIMIT = 10
   PROJECT_DETAIL_SECTIONS = {

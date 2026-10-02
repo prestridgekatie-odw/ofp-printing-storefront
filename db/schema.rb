@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_24_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
   create_table "quote_requests", force: :cascade do |t|
     t.string "artwork_status", null: false
     t.boolean "contact_consent", default: false, null: false
@@ -32,8 +32,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_24_090000) do
     t.string "public_reference", null: false
     t.string "quantity_summary", null: false
     t.boolean "rush_request", default: false, null: false
+    t.string "shopify_draft_order_id"
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
     t.index ["public_reference"], name: "index_quote_requests_on_public_reference", unique: true
+    t.index ["shopify_draft_order_id"], name: "index_quote_requests_on_shopify_draft_order_id", unique: true
   end
 end
