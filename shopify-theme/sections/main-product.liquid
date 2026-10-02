@@ -1,0 +1,32 @@
+<section class="product-main page-width section-pad">
+  <div class="product-media">
+    {% for media in product.media %}
+      {% if media.media_type == 'image' %}
+        {% assign media_alt = media.alt | default: product.title %}
+        {{ media.preview_image | image_url: width: 1600 | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 800px) 55vw, 100vw', loading: 'lazy', alt: media_alt }}
+      {% else %}{{ media | media_tag }}{% endif %}
+    {% else %}<div class="product-image-empty product-image-large">{{ product.title | escape }}</div>{% endfor %}
+  </div>
+  <div class="product-details">
+    {% if section.settings.show_vendor and product.vendor != blank %}<p class="eyebrow">{{ product.vendor | escape }}</p>{% endif %}
+    <h1>{{ product.title | escape }}</h1>
+    <p class="product-price price" data-product-price><span data-current-price>{{ product.selected_or_first_available_variant.price | money }}</span><s data-compare-price {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}hidden{% endunless %}>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s></p>
+    {% form 'product', product, class: 'product-form' %}
+      {% if product.has_only_default_variant == false %}<label for="VariantSelect-{{ section.id }}">Options</label><select id="VariantSelect-{{ section.id }}" name="id" data-variant-select>{% for variant in product.variants %}<option value="{{ variant.id }}" data-price="{{ variant.price | money | escape }}" data-compare-price="{{ variant.compare_at_price | money | escape }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title | escape }} - {{ variant.price | money }}{% unless variant.available %} - Sold out{% endunless %}</option>{% endfor %}</select>{% else %}<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">{% endif %}
+      <label for="Quantity-{{ section.id }}">Quantity</label><input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1">
+      <button class="button button-bright add-to-cart" type="submit" name="add" data-add-to-cart {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>{% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</button>
+      {{ form | payment_button }}
+    {% endform %}
+    {% if section.settings.show_description and product.description != blank %}<div class="product-description rte">{{ product.description }}</div>{% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product information",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true }
+  ]
+}
+{% endschema %}

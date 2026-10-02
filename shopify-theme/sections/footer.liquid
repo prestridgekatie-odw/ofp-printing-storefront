@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+        {% if settings.logo != blank %}
+          {{ settings.logo | image_url: width: 360 | image_tag: class: 'footer-logo', alt: shop.name }}
+        {% else %}<img class="footer-logo" src="{{ 'ofp-logo-transparent.png' | asset_url }}" alt="{{ shop.name | escape }}" width="220" height="176">{% endif %}
+      </a>
+      <p>{{ section.settings.tagline | escape }}</p>
+    </div>
+    <div><h2>Explore</h2><nav aria-label="Footer navigation">{% for link in section.settings.menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}<a href="{{ routes.all_products_collection_url }}">Shop all</a></nav></div>
+    <div><h2>Get in touch</h2><address>{% if settings.phone != blank %}<a href="tel:{{ settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">{{ settings.phone | escape }}</a>{% endif %}{% if settings.email != blank %}<a href="mailto:{{ settings.email | escape }}">{{ settings.email | escape }}</a>{% endif %}{% if settings.address != blank %}<span>{{ settings.address | escape }}</span>{% endif %}</address></div>
+    <div><h2>Follow</h2><nav aria-label="Social media">{% if settings.instagram_url != blank %}<a href="{{ settings.instagram_url }}" rel="noopener">Instagram</a>{% endif %}{% if settings.facebook_url != blank %}<a href="{{ settings.facebook_url }}" rel="noopener">Facebook</a>{% endif %}</nav></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</span><a href="{{ routes.policies_privacy_url }}">Privacy</a><a href="{{ routes.policies_terms_of_service_url }}">Terms</a></div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "High-quality custom printing for every need." },
+    { "type": "link_list", "id": "menu", "label": "Footer menu", "default": "footer" }
+  ]
+}
+{% endschema %}

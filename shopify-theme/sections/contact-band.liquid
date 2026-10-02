@@ -1,0 +1,18 @@
+<section class="contact-band section-pad">
+  <div><p class="eyebrow">{{ section.settings.eyebrow | escape }}</p><h2>{{ section.settings.heading | escape }}</h2><p>{{ section.settings.copy | escape }}</p></div>
+  <a class="button button-dark" href="{{ section.settings.link | default: 'mailto:' | append: settings.email }}">{{ section.settings.button_label | escape }} <span aria-hidden="true">&rarr;</span></a>
+</section>
+
+{% schema %}
+{
+  "name": "Contact callout",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Custom work starts here" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Ready to start your project?" },
+    { "type": "textarea", "id": "copy", "label": "Text", "default": "Let's create something amazing together." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Get in touch" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Contact callout" }]
+}
+{% endschema %}

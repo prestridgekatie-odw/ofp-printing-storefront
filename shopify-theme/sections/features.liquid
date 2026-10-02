@@ -1,0 +1,35 @@
+<section class="features section-pad">
+  <div class="features-intro">
+    <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    <h2>{{ section.settings.heading | escape }}</h2>
+    <p>{{ section.settings.copy | escape }}</p>
+  </div>
+  <div class="feature-list">
+    {% for block in section.blocks %}
+      <article class="feature" {{ block.shopify_attributes }}>
+        <span class="feature-number">0{{ forloop.index }}</span>
+        <h3>{{ block.settings.heading | escape }}</h3>
+        <p>{{ block.settings.copy | escape }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Why choose OFP",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made to make an impression" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why choose OFP Printing?" },
+    { "type": "textarea", "id": "copy", "label": "Text", "default": "Premium materials, skilled craft, and thoughtful service from the first idea to the final print." }
+  ],
+  "blocks": [
+    { "type": "feature", "name": "Feature", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Premium quality" },
+      { "type": "textarea", "id": "copy", "label": "Text", "default": "Lasting materials and carefully finished details." }
+    ] }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Why choose OFP", "blocks": [{ "type": "feature", "settings": { "heading": "Premium quality", "copy": "We use quality materials and proven print methods for lasting results." } }, { "type": "feature", "settings": { "heading": "Vibrant designs", "copy": "Bold color and crisp detail help your design stand out." } }, { "type": "feature", "settings": { "heading": "Made for your timeline", "copy": "Tell us when you need it and we will plan the right production path." } }, { "type": "feature", "settings": { "heading": "Personal service", "copy": "Get attentive help from your first project details through delivery." } }] }]
+}
+{% endschema %}

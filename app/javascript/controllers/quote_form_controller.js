@@ -94,7 +94,10 @@ export default class extends Controller {
       this.projectTypeMessageTarget.removeAttribute("role")
 
       const missingDetailGroup = [...currentStep.querySelectorAll("[data-project-details-required='true']")]
-        .find((group) => ![...group.querySelectorAll("input:not(:disabled)")].some((input) => input.checked))
+        .find((group) => {
+          const inputs = [...group.querySelectorAll("input:not(:disabled)")]
+          return inputs.length > 0 && !inputs.some((input) => input.checked)
+        })
       if (missingDetailGroup) {
         missingDetailGroup.querySelector("input:not(:disabled)")?.focus()
         return false

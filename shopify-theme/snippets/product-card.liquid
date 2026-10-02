@@ -1,0 +1,12 @@
+<article class="product-card">
+  <a class="product-card-image" href="{{ product.url }}">
+    {% if product.featured_image %}
+      {% assign product_alt = product.featured_image.alt | default: product.title %}
+      {{ product.featured_image | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(min-width: 900px) 25vw, (min-width: 600px) 50vw, 100vw', loading: 'lazy', alt: product_alt }}
+    {% else %}<span class="product-image-empty">{{ product.title | escape }}</span>{% endif %}
+    {% unless product.available %}<span class="sold-out-label">Sold out</span>{% endunless %}
+  </a>
+  <div class="product-card-info"><h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    <p class="price">{% if product.price_varies %}<span>From </span>{% endif %}{{ product.price_min | money }}{% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money }}</s>{% endif %}</p>
+  </div>
+</article>

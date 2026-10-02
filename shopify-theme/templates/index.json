@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "features": {
+      "type": "features",
+      "blocks": {
+        "one": { "type": "feature", "settings": { "heading": "Premium quality", "copy": "We use quality materials and proven print methods for lasting results." } },
+        "two": { "type": "feature", "settings": { "heading": "Vibrant designs", "copy": "Bold color and crisp detail help your design stand out." } },
+        "three": { "type": "feature", "settings": { "heading": "Made for your timeline", "copy": "Tell us when you need it and we will plan the right production path." } },
+        "four": { "type": "feature", "settings": { "heading": "Personal service", "copy": "Get attentive help from your first project details through delivery." } }
+      },
+      "block_order": ["one", "two", "three", "four"],
+      "settings": {}
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {}
+    },
+    "contact": {
+      "type": "contact-band",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "features", "featured", "contact"]
+}

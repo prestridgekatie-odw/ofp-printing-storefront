@@ -1,0 +1,31 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "OFP Printing",
+    "theme_author": "OFP Printing & Apparel",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://help.shopify.com/en/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo" },
+      { "type": "range", "id": "logo_width", "min": 60, "max": 220, "step": 10, "unit": "px", "label": "Logo width", "default": 110 },
+      { "type": "color", "id": "ink", "label": "Ink", "default": "#111014" },
+      { "type": "color", "id": "pink", "label": "Pink", "default": "#ff1682" },
+      { "type": "color", "id": "cyan", "label": "Cyan", "default": "#05cfe0" },
+      { "type": "color", "id": "orange", "label": "Orange", "default": "#ff8a16" }
+    ]
+  },
+  {
+    "name": "Contact information",
+    "settings": [
+      { "type": "text", "id": "phone", "label": "Phone", "default": "(951) 676-7706" },
+      { "type": "text", "id": "email", "label": "Email", "default": "info@ofpprinting.com" },
+      { "type": "text", "id": "address", "label": "Street address", "default": "43391 Business Park Drive, Suite C-5" },
+      { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+      { "type": "url", "id": "facebook_url", "label": "Facebook URL" }
+    ]
+  }
+]

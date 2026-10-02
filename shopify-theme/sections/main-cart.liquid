@@ -1,0 +1,18 @@
+<section class="page-width section-pad cart-main">
+  <h1>Your cart</h1>
+  {% if cart.item_count == 0 %}<p>Your cart is empty.</p><a class="button button-bright" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <div class="cart-items">{% for item in cart.items %}
+        <article class="cart-item">
+          <a class="cart-item-image" href="{{ item.url }}">{% if item.image %}{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.title }}{% endif %}</a>
+          <div class="cart-item-info"><h2><a href="{{ item.url }}">{{ item.product.title | escape }}</a></h2>{% unless item.variant.title == 'Default Title' %}<p>{{ item.variant.title | escape }}</p>{% endunless %}<p>{{ item.final_line_price | money }}</p><a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0">Remove</a></div>
+          <label class="quantity-field">Quantity<input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.title | escape }}"></label>
+        </article>
+      {% endfor %}</div>
+      <div class="cart-summary"><button class="button button-outline-dark" type="submit" name="update">Update cart</button><p>Subtotal <strong>{{ cart.total_price | money }}</strong></p><p class="cart-note">Shipping and taxes calculated at checkout.</p><button class="button button-bright" type="submit" name="checkout">Checkout</button></div>
+    </form>
+  {% endif %}
+</section>
+
+{% schema %}{"name":"Cart"}{% endschema %}
