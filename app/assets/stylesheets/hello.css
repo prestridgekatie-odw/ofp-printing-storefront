@@ -13,7 +13,7 @@ a { color: inherit; text-decoration: none; }
 .site-nav .cart-link { font-size: 1rem; line-height: 1; }
 .menu-toggle { background: none; border: 0; display: none; padding: .4rem; }
 .menu-toggle span:not(.sr-only) { background: var(--ink); display: block; height: 2px; margin: 4px; width: 24px; }
-.hero { align-items: center; background-image: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.48) 24%, rgba(0,0,0,0) 58%), var(--hero-background); background-position: center right; background-size: cover; color: #fff; display: flex; min-height: min(860px, 100vh); padding: 12rem clamp(1.25rem, 10vw, 10rem) 5rem; }
+.hero { align-items: center; background-image: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.48) 24%, rgba(0,0,0,0) 58%), var(--hero-background); background-position: center, right calc(50% + 4rem); background-size: cover; color: #fff; display: flex; min-height: min(860px, 100vh); padding: 12rem clamp(1.25rem, 10vw, 10rem) 5rem; }
 .hero-content { max-width: 480px; width: 38%; }
 .eyebrow { font-family: Arial, sans-serif; font-size: .67rem; font-weight: 800; letter-spacing: .2em; margin: 0 0 1.25rem; text-transform: uppercase; }
 h1, h2, h3, p { margin-top: 0; }
