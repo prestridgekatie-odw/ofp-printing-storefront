@@ -69,6 +69,15 @@ class QuoteRequestsControllerTest < ActionDispatch::IntegrationTest
 		assert_response :unprocessable_entity
 	end
 
+	test "reopens selected project details when validation fails" do
+		post quote_requests_path, params: { quote_request: @payload.merge(quantity_summary: "") }
+
+		assert_response :unprocessable_entity
+		assert_select "#project-details-sports-uniforms:not([hidden])"
+		assert_select "#project-type-sports-uniforms[aria-expanded='true']"
+		assert_select "#project-detail-sports_uniforms-sport-football:not([disabled])"
+	end
+
 	test "limits quote submissions to five per minute" do
 		with_draft_order_service(->(_intake) { raise ShopifyServices::CreateDraftOrder::Error, "Shopify unavailable" }) do
 			5.times { post quote_requests_path, params: { quote_request: @payload } }

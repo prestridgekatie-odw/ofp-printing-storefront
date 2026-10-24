@@ -48,8 +48,9 @@
     </div>
     <div class="project-details-panels">
       <% QuoteRequest::PROJECT_DETAIL_SECTIONS.each do |project_type, section| %>
+        <% selected = @quote_request.project_types.include?(project_type) %>
         <% detail_values = @quote_request.project_details.to_h[section[:key]].to_h %>
-        <fieldset class="project-detail-panel" id="project-details-<%= project_type.parameterize %>" data-project-details-target="panel" data-project-type="<%= project_type %>" aria-labelledby="project-details-<%= project_type.parameterize %>-legend" hidden>
+        <fieldset class="project-detail-panel" id="project-details-<%= project_type.parameterize %>" data-project-details-target="panel" data-project-type="<%= project_type %>" aria-labelledby="project-details-<%= project_type.parameterize %>-legend" aria-hidden="<%= !selected %>" <%= "hidden" unless selected %>>
           <legend id="project-details-<%= project_type.parameterize %>-legend"><%= project_type %> details</legend>
           <div class="project-detail-grid">
             <% section[:fields].each do |field, definition| %>
@@ -58,15 +59,15 @@
               <% if definition[:type] == :text %>
                 <div class="field project-detail-field"<%= " data-other-field-for=\"#{definition[:required_for]}\" hidden" if definition[:required_for] %>>
                   <%= label_tag "project-detail-#{section[:key]}-#{field}", field_label do %><%= field_label %><% if definition[:required_for] %> <span class="required-mark" aria-hidden="true">*</span><% end %><% end %>
-                  <%= text_field_tag "quote_request[project_details][#{section[:key]}][#{field}]", value, id: "project-detail-#{section[:key]}-#{field}", maxlength: QuoteRequest::DETAIL_TEXT_LIMIT, autocomplete: "off", disabled: definition[:required_for].present?, data: { project_details_other_input: field } %>
+                  <%= text_field_tag "quote_request[project_details][#{section[:key]}][#{field}]", value, id: "project-detail-#{section[:key]}-#{field}", maxlength: QuoteRequest::DETAIL_TEXT_LIMIT, autocomplete: "off", disabled: !selected || definition[:required_for].present?, data: { project_details_other_input: field } %>
                 </div>
               <% elsif definition[:type] == :multiple %>
                 <fieldset class="field-group project-detail-field" data-project-details-required="<%= definition[:required] %>" data-project-details-field-group="<%= field %>"><legend><%= field_label %><% if definition[:required] %> <span class="required-mark" aria-hidden="true">*</span><% end %></legend><div class="detail-choice-grid">
-                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= check_box_tag "quote_request[project_details][#{section[:key]}][#{field}][]", option, Array(value).include?(option), id: "project-detail-#{section[:key]}-#{field}-#{option}", disabled: true, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
+                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= check_box_tag "quote_request[project_details][#{section[:key]}][#{field}][]", option, Array(value).include?(option), id: "project-detail-#{section[:key]}-#{field}-#{option}", disabled: !selected, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
                 </div></fieldset>
               <% else %>
                 <fieldset class="field-group project-detail-field" data-project-details-required="<%= definition[:required] %>" data-project-details-field-group="<%= field %>"><legend><%= field_label %><% if definition[:required] %> <span class="required-mark" aria-hidden="true">*</span><% end %></legend><div class="detail-choice-grid detail-choice-grid-single">
-                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= radio_button_tag "quote_request[project_details][#{section[:key]}][#{field}]", option, value == option, id: "project-detail-#{section[:key]}-#{field}-#{option}", required: definition[:required], disabled: true, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
+                  <% definition[:values].each do |option| %><label class="choice-card detail-choice"><%= radio_button_tag "quote_request[project_details][#{section[:key]}][#{field}]", option, value == option, id: "project-detail-#{section[:key]}-#{field}-#{option}", required: definition[:required], disabled: !selected, data: { project_details_field: field, action: "project-details#updateOther" } %><span><%= option == "not_sure" ? "Not sure - recommend the best option" : option.humanize %></span></label><% end %>
                 </div></fieldset>
               <% end %>
             <% end %>

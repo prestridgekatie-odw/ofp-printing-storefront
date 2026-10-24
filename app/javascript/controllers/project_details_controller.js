@@ -6,14 +6,14 @@ export default class extends Controller {
   connect() {
     this.panelTargets.forEach((panel) => {
       const checkbox = this.checkboxFor(panel)
-      this.syncPanel(panel, checkbox?.checked, false)
+      this.syncPanel(panel, checkbox?.checked)
     })
   }
 
   toggle(event) {
     const checkbox = event.currentTarget
     const panel = this.panelTargets.find((candidate) => candidate.dataset.projectType === checkbox.value)
-    if (panel) this.syncPanel(panel, checkbox.checked, !checkbox.checked)
+    if (panel) this.syncPanel(panel, checkbox.checked)
   }
 
   updateOther(event) {
@@ -24,7 +24,7 @@ export default class extends Controller {
     return this.element.querySelector(`input[name='quote_request[project_types][]'][value='${CSS.escape(panel.dataset.projectType)}']`)
   }
 
-  syncPanel(panel, selected, reset) {
+  syncPanel(panel, selected) {
     const checkbox = this.checkboxFor(panel)
     const controls = panel.querySelectorAll("input, select, textarea")
     panel.hidden = !selected
@@ -33,10 +33,6 @@ export default class extends Controller {
 
     controls.forEach((control) => {
       control.disabled = !selected
-      if (reset) {
-        if (control.type === "checkbox" || control.type === "radio") control.checked = false
-        else control.value = ""
-      }
     })
     this.updateOtherFields(panel)
   }

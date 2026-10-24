@@ -62,6 +62,19 @@ class QuoteRequestTest < ActiveSupport::TestCase
     assert_nil request.project_details.dig("sports_uniforms", "unknown")
   end
 
+  test "validates required details only for selected project types" do
+    request = QuoteRequest.new(valid_attributes.merge(
+      project_types: ["Sports Uniforms"],
+      project_details: {
+        "sports_uniforms" => valid_sports_details,
+        "fan_apparel_spirit_wear" => { "garment_types" => ["other"] }
+      }
+    ))
+
+    assert request.valid?, request.errors.full_messages
+    assert_equal ["sports_uniforms"], request.project_details.keys
+  end
+
   test "requires Other explanations for every conditional detail group" do
     QuoteRequest::PROJECT_DETAIL_SECTIONS.each do |project_type, section|
       section[:fields].each do |field, definition|
