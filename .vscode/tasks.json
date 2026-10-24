@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Preview OFP homepage",
+			"type": "shell",
+			"command": "bin/rails",
+			"args": [
+				"server",
+				"-b",
+				"0.0.0.0"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

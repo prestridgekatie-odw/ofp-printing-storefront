@@ -97,3 +97,16 @@ class QuoteRequestsController < ApplicationController
 		end
 	end
 end
+# app/controllers/quote_requests_controller.rb
+private
+
+def quote_request_params
+  params.require(:quote_request).permit(
+    :organization_name, :contact_name, :email, :phone, :preferred_contact,
+    :brand_preference, :design_style, :needed_by_date, :is_rush_order, :delivery_method,
+    { project_types: [] }, { garment_types: [] }, { decoration_methods: [] },
+    # 🚀 EXPLICIT NESTED ARRAY WHITELISTING
+    # The '_destroy' attribute allows Stimulus JS to pass deletion flags smoothly
+    roster_lines_attributes: [:id, :player_name, :jersey_size, :pant_size, :short_size, :hoodie_size, :number, :custom_properties, :_destroy]
+  )
+end

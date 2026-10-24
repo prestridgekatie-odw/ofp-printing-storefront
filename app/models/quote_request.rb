@@ -134,6 +134,8 @@ class QuoteRequest < ApplicationRecord
   }.freeze
   PROJECT_DETAIL_KEYS = PROJECT_DETAIL_SECTIONS.transform_values { |section| section[:key] }.freeze
 
+  has_many :roster_lines, dependent: :destroy
+
   before_validation :normalize_contact_details
   before_validation :normalize_project_details
   before_validation :generate_public_reference, on: :create

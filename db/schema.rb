@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_120000) do
   create_table "quote_requests", force: :cascade do |t|
     t.string "artwork_status", null: false
     t.boolean "contact_consent", default: false, null: false
@@ -38,4 +38,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_090000) do
     t.index ["public_reference"], name: "index_quote_requests_on_public_reference", unique: true
     t.index ["shopify_draft_order_id"], name: "index_quote_requests_on_shopify_draft_order_id", unique: true
   end
+
+  create_table "roster_lines", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "custom_properties"
+    t.string "hoodie_size"
+    t.string "jersey_size"
+    t.integer "number"
+    t.string "pant_size"
+    t.string "player_name"
+    t.integer "quote_request_id", null: false
+    t.string "short_size"
+    t.datetime "updated_at", null: false
+    t.index ["quote_request_id"], name: "index_roster_lines_on_quote_request_id"
+  end
+
+  add_foreign_key "roster_lines", "quote_requests"
 end
