@@ -4,8 +4,30 @@
     <label for="SearchInput">Search products</label><input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products">
     <input type="hidden" name="type" value="product"><button class="button button-dark" type="submit">Search</button>
   </form>
-  {% if search.performed %}<p class="search-count">{{ search.results_count }} results for “{{ search.terms | escape }}”</p>
-    {% paginate search.results by 16 %}<div class="product-grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% endif %}{% else %}<p>No matching products found.</p>{% endfor %}</div>{% if paginate.pages > 1 %}<nav class="pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}</nav>{% endpaginate %}
-  {% endif %}
+  {% paginate search.results by 16 %}
+    {% if search.performed %}
+      <p class="search-count">{{ search.results_count }} results for “{{ search.terms | escape }}”</p>
+      <div class="product-grid">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            {% render 'product-card', product: item %}
+          {% endif %}
+        {% else %}
+          <p>No matching products found.</p>
+        {% endfor %}
+      </div>
+      {% if paginate.pages > 1 %}
+        <nav class="pagination">
+          {% if paginate.previous %}<a href="{{ paginate.previous.url }}">Previous</a>{% endif %}
+          <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {% if paginate.next %}<a href="{{ paginate.next.url }}">Next</a>{% endif %}
+        </nav>
+      {% endif %}
+    {% endif %}
+  {% endpaginate %}
 </section>
-{% schema %}{"name":"Search results"}{% endschema %}
+{% schema %}
+{
+  "name": "Search results"
+}
+{% endschema %}
