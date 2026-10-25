@@ -12,6 +12,17 @@
 			],
 			"isBackground": true,
 			"problemMatcher": []
+		},
+		{
+			"label": "Authenticate Shopify CLI",
+			"type": "shell",
+			"command": "shopify",
+			"args": [
+				"auth",
+				"login"
+			],
+			"isBackground": true,
+			"problemMatcher": []
 		}
 	]
 }
