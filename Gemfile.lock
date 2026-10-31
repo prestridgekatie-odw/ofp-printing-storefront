@@ -206,6 +206,11 @@ GEM
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
+    pg (1.7.0)
+    pg (1.7.0-aarch64-linux)
+    pg (1.7.0-arm64-darwin)
+    pg (1.7.0-x86_64-darwin)
+    pg (1.7.0-x86_64-linux)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -218,6 +223,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -267,6 +274,10 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.31.0)
+      connection_pool
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -294,6 +305,12 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sidekiq (8.1.7)
+      connection_pool (>= 3.0.0)
+      json (>= 2.16.0)
+      logger (>= 1.7.0)
+      rack (>= 3.2.0)
+      redis-client (>= 0.29.0)
     smart_properties (1.17.0)
     solargraph (0.58.3)
       ast (~> 2.4.3)
@@ -383,9 +400,13 @@ DEPENDENCIES
   hotwire-livereload (~> 1.2)
   importmap-rails
   jbuilder
+  pg (~> 1.5)
   puma (~> 7.2)
+  rack-cors (~> 2.0)
   rails (~> 8.1.0)
+  redis (~> 5.4)
   selenium-webdriver
+  sidekiq (~> 8.0)
   solargraph
   sprockets-rails
   sqlite3 (~> 2.1)

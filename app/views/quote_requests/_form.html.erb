@@ -9,7 +9,8 @@
                     1
                   end %>
 
-<%= form_with model: @quote_request, url: quote_requests_path, class: "quote-form", data: { controller: "quote-form project-details", quote_form_target: "form", initial_step: initial_step } do |form| %>
+<%= form_with model: @quote_request, url: @quote_form_action, authenticity_token: @proxy_form_token.present? ? false : nil, class: "quote-form", data: { controller: "quote-form project-details", quote_form_target: "form", initial_step: initial_step } do |form| %>
+  <%= hidden_field_tag :proxy_form_token, @proxy_form_token if @proxy_form_token %>
   <% if @quote_request.errors.any? %>
     <div class="form-errors" role="alert" tabindex="-1" data-quote-form-target="errorSummary">
       <h2 id="quote-errors-title">Please review your request</h2>

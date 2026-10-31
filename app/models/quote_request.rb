@@ -17,6 +17,7 @@ class QuoteRequest < ApplicationRecord
   DELIVERY_METHODS = %w[pickup shipping local_delivery].freeze
   ARTWORK_STATUSES = %w[full_design existing_artwork minor_edits reorder].freeze
   STATUSES = %w[new submitted_review].freeze
+  INTEGRATION_STATUSES = %w[pending queued processing sent created failed].freeze
   DETAIL_TEXT_LIMIT = 255
   DETAIL_SELECTION_LIMIT = 10
   PROJECT_DETAIL_SECTIONS = {
@@ -150,6 +151,8 @@ class QuoteRequest < ApplicationRecord
   validates :delivery_method, inclusion: { in: DELIVERY_METHODS }
   validates :artwork_status, inclusion: { in: ARTWORK_STATUSES }
   validates :status, inclusion: { in: STATUSES }
+  validates :notification_status, inclusion: { in: INTEGRATION_STATUSES }
+  validates :shopify_draft_order_status, inclusion: { in: INTEGRATION_STATUSES }
   validates :other_project_type, presence: true, if: -> { project_types.include?("Other") }
   validates :quantity_summary, length: { maximum: 255 }
   validates :description, length: { maximum: 5000 }

@@ -6,6 +6,12 @@ ruby "~> 3.4.0"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.0"
 
+# Production database, shared cache/rate limiter, and persistent background jobs.
+gem "pg", "~> 1.5", group: :production
+gem "redis", "~> 5.4"
+gem "sidekiq", "~> 8.0"
+gem "rack-cors", "~> 2.0"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

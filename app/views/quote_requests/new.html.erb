@@ -1,9 +1,9 @@
-<main class="quote-page" data-controller="quote-form">
+<main class="quote-page">
   <header class="quote-header">
-    <%= link_to root_path, class: "quote-brand", aria: { label: "OFP Printing home" } do %>
+    <%= link_to @return_to_home_url, class: "quote-brand", aria: { label: "OFP Printing home" } do %>
       <%= image_tag "ofp/ofp-logo-transparent.png", alt: "OFP Printing" %>
     <% end %>
-    <%= link_to "Back to home", root_path, class: "quote-home-link" %>
+    <%= link_to "Back to home", @return_to_home_url, class: "quote-home-link" %>
   </header>
   <section class="quote-shell" aria-labelledby="quote-title">
     <div class="quote-intro-block">
